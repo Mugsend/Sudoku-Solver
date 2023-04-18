@@ -174,7 +174,7 @@ function obviousSingles(notes, grid) {
         let num = notes[r][c].pop();
 
         fill(num, r, c, notes, grid);
-        return true;
+        return { num, r, c };
       }
     }
   }
@@ -298,7 +298,12 @@ function help() {
     alert("Please clear all the wrong fills before proceeding.");
     return;
   }
-  document.getElementById("won").hidden = false;
+
+  console.log(obviousSingles(notes, inputGrid));
+}
+
+function showCat() {
+  document.getElementById("cat").hidden = false;
   const audio = document.getElementById("sound");
   audio.play();
   audio.loop = true;
