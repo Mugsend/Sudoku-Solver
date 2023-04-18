@@ -22,20 +22,18 @@ function copyTwoDimensionalArray(arr) {
 
 var inputFilled = 0;
 (function initiateGrid() {
-  const grid = document.createElement("div");
-  grid.id = "grid";
+  const grid = document.getElementById("grid");
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       const cell = document.createElement("div");
       cell.id = i * 9 + j;
-
       if (inputGrid[i][j]) {
         inputFilled++;
         cell.innerText = inputGrid[i][j];
         cell.className = "filled";
       } else {
         cell.className = "empty";
-        cell.innerHTML = notes[i][j].join(" ");
+        cell.innerText = notes[i][j].join(" ");
         cell.onclick = function () {
           select = this.id;
         };
@@ -43,7 +41,6 @@ var inputFilled = 0;
       grid.appendChild(cell);
     }
   }
-  document.body.appendChild(grid);
 })();
 
 const filledGrid = getFilledGrid(inputGrid, inputFilled);
@@ -59,12 +56,14 @@ document.addEventListener("keydown", function (event) {
         document.getElementById(select).innerText = n;
         num = filledGrid[i][j];
         if (n == num) {
+          inputFilled++;
           inputGrid[i][j] = n;
           document.getElementById(select).className = "filled correct";
           document.getElementById(select).onclick = "";
           notes[i][j] = [];
           updateNotes(n, i, j, notes);
           updateGrid(i, j);
+          if (inputFilled == 81) help();
         } else {
           wrong = true;
           document.getElementById(select).className = "filled incorrect";
@@ -274,4 +273,10 @@ function getFilledGrid(inputGrid, inputfilled) {
     filled++;
   }
   return grid;
+}
+
+function help() {
+  document.getElementById("won").hidden = false;
+  const audio = document.getElementById("sound");
+  audio.play();
 }
