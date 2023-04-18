@@ -20,6 +20,16 @@ function copyTwoDimensionalArray(arr) {
   return newArray;
 }
 
+(function keyboard() {
+  const keyboard = document.getElementById("keyboard");
+  for (let i = 1; i <= 9; i++) {
+    const button = document.createElement("button");
+    button.innerText = i;
+    button.onclick = () => fillNumber(i);
+    keyboard.appendChild(button);
+  }
+})();
+
 var inputFilled = 0;
 (function initiateGrid() {
   const grid = document.getElementById("grid");
@@ -48,34 +58,38 @@ const filledGrid = getFilledGrid(inputGrid, inputFilled);
 document.addEventListener("keydown", function (event) {
   if (event.key >= "0" && event.key <= "9") {
     let n = parseInt(event.key);
-    if (select != -1) {
-      const i = Math.floor(select / 9);
-      const j = select % 9;
-
-      if (n) {
-        document.getElementById(select).innerText = n;
-        num = filledGrid[i][j];
-        if (n == num) {
-          inputFilled++;
-          inputGrid[i][j] = n;
-          document.getElementById(select).className = "filled correct";
-          document.getElementById(select).onclick = "";
-          notes[i][j] = [];
-          updateNotes(n, i, j, notes);
-          updateGrid(i, j);
-          if (inputFilled == 81) help();
-        } else {
-          wrong = true;
-          document.getElementById(select).className = "filled incorrect";
-        }
-      } else {
-        document.getElementById(select).innerText = notes[i][j].join(" ");
-        document.getElementById(select).className = "empty";
-      }
-      select = -1;
-    }
+    fillNumber(n, select);
   }
 });
+
+function fillNumber(n) {
+  if (select != -1) {
+    console.log(select);
+    const i = Math.floor(select / 9);
+    const j = select % 9;
+    if (n) {
+      document.getElementById(select).innerText = n;
+      num = filledGrid[i][j];
+      if (n == num) {
+        inputFilled++;
+        inputGrid[i][j] = n;
+        document.getElementById(select).className = "filled correct";
+        document.getElementById(select).onclick = "";
+        notes[i][j] = [];
+        updateNotes(n, i, j, notes);
+        updateGrid(i, j);
+        if (inputFilled == 81) help();
+      } else {
+        wrong = true;
+        document.getElementById(select).className = "filled incorrect";
+      }
+    } else {
+      document.getElementById(select).innerText = notes[i][j].join(" ");
+      document.getElementById(select).className = "empty";
+    }
+    select = -1;
+  }
+}
 
 function updateGrid(r, c) {
   for (let i = 0; i < 9; i++) {
