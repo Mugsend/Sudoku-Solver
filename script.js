@@ -162,23 +162,57 @@ function checkBlock(num, r, c, grid) {
   return true;
 }
 
+function findObviousSingles(notes, grid) {
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (notes[r][c].length == 1) {
+        const num = notes[r][c][0];
+        return { num, r, c };
+      }
+    }
+  }
+  return;
+}
+
+function findHiddenSingles(notes, grid) {
+  const notesFreq = getNotesFreq(notes);
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      for (let num of notes[r][c]) {
+        if (
+          notesFreq.row[r].get(num) == 1 ||
+          notesFreq.col[c].get(num) == 1 ||
+          notesFreq.block[Math.floor(r / 3) * 3 + Math.floor(c / 3)].get(num) ==
+            1
+        ) {
+          return { num, r, c };
+        }
+      }
+    }
+  }
+  return;
+}
+
 function fill(num, r, c, notes, grid) {
+  notes[r][c] = [];
   updateNotes(num, r, c, notes);
   grid[r][c] = num;
 }
 
 function obviousSingles(notes, grid) {
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (notes[r][c].length == 1) {
-        let num = notes[r][c].pop();
+  const params = findObviousSingles(notes, grid);
+  if (params) {
+    fill(params.num, params.r, params.c, notes, grid);
+    return true;
+  } else return false;
+}
 
-        fill(num, r, c, notes, grid);
-        return { num, r, c };
-      }
-    }
-  }
-  return false;
+function hiddenSingles(notes, grid) {
+  const params = findHiddenSingles(notes, grid);
+  if (params) {
+    fill(params.num, params.r, params.c, notes, grid);
+    return true;
+  } else return false;
 }
 
 function updateNotes(num, r, c, notes) {
@@ -245,27 +279,6 @@ function getNotesFreq(notes) {
   return notesFreq;
 }
 
-function hiddenSingles(notes, grid) {
-  const notesFreq = getNotesFreq(notes);
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      for (let num of notes[r][c]) {
-        if (
-          notesFreq.row[r].get(num) == 1 ||
-          notesFreq.col[c].get(num) == 1 ||
-          notesFreq.block[Math.floor(r / 3) * 3 + Math.floor(c / 3)].get(num) ==
-            1
-        ) {
-          notes[r][c] = [];
-          fill(num, r, c, notes, grid);
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
-
 function printNotes(notes) {
   let r = 0;
   for (let i of notes) {
@@ -298,8 +311,22 @@ function help() {
     alert("Please clear all the wrong fills before proceeding.");
     return;
   }
-
-  console.log(obviousSingles(notes, inputGrid));
+  if (inputFilled == 81) {
+    document.getElementById("hint").innerText =
+      "Congratulations we have solved the puzzle!!";
+    showCat();
+    return;
+  }
+  var trick = "Obvious Single";
+  var hinted = findObviousSingles(notes, inputGrid);
+  if (!hinted) {
+    hinted = findHiddenSingles(notes, inputGrid);
+    trick = "Hidden Single";
+  }
+  document.getElementById(hinted.r * 9 + hinted.c).className = "hinted";
+  document.getElementById(
+    "hint"
+  ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
 }
 
 function showCat() {
