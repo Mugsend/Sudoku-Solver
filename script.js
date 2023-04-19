@@ -9,7 +9,7 @@ const inputGrid = [
   [4, 0, 0, 0, 9, 0, 7, 0, 1],
   [0, 0, 0, 0, 0, 4, 2, 0, 0],
 ];
-var wrong = false;
+const wrong = new Set();
 var select = -1;
 const notes = getNotes(inputGrid);
 function copyTwoDimensionalArray(arr) {
@@ -64,15 +64,15 @@ document.addEventListener("keydown", function (event) {
 
 function fillNumber(n) {
   if (select != -1) {
-    console.log(select);
     const i = Math.floor(select / 9);
     const j = select % 9;
     if (n) {
       document.getElementById(select).innerText = n;
+      inputGrid[i][j] = n;
       num = filledGrid[i][j];
       if (n == num) {
+        wrong.delete(select);
         inputFilled++;
-        inputGrid[i][j] = n;
         document.getElementById(select).className = "filled correct";
         document.getElementById(select).onclick = "";
         notes[i][j] = [];
@@ -80,8 +80,8 @@ function fillNumber(n) {
         updateGrid(i, j);
         if (inputFilled == 81) help();
       } else {
-        wrong = true;
         document.getElementById(select).className = "filled incorrect";
+        wrong.add(select);
       }
     } else {
       document.getElementById(select).innerText = notes[i][j].join(" ");
@@ -93,14 +93,18 @@ function fillNumber(n) {
 
 function updateGrid(r, c) {
   for (let i = 0; i < 9; i++) {
-    if (!inputGrid[i][c])
+    if (!inputGrid[i][c]) {
       document.getElementById(i * 9 + c).innerText = notes[i][c].join(" ");
-    if (!inputGrid[r][i])
+    }
+    if (!inputGrid[r][i]) {
       document.getElementById(r * 9 + i).innerText = notes[r][i].join(" ");
+    }
+
     let br = r - (r % 3) + Math.floor(i / 3);
     let bc = c - (c % 3) + (i % 3);
-    if (!inputGrid[br][bc])
+    if (!inputGrid[br][bc]) {
       document.getElementById(br * 9 + bc).innerText = notes[br][bc].join(" ");
+    }
   }
 }
 
@@ -158,23 +162,57 @@ function checkBlock(num, r, c, grid) {
   return true;
 }
 
+function findObviousSingles(notes, grid) {
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (notes[r][c].length == 1) {
+        const num = notes[r][c][0];
+        return { num, r, c };
+      }
+    }
+  }
+  return;
+}
+
+function findHiddenSingles(notes, grid) {
+  const notesFreq = getNotesFreq(notes);
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      for (let num of notes[r][c]) {
+        if (
+          notesFreq.row[r].get(num) == 1 ||
+          notesFreq.col[c].get(num) == 1 ||
+          notesFreq.block[Math.floor(r / 3) * 3 + Math.floor(c / 3)].get(num) ==
+            1
+        ) {
+          return { num, r, c };
+        }
+      }
+    }
+  }
+  return;
+}
+
 function fill(num, r, c, notes, grid) {
+  notes[r][c] = [];
   updateNotes(num, r, c, notes);
   grid[r][c] = num;
 }
 
 function obviousSingles(notes, grid) {
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (notes[r][c].length == 1) {
-        let num = notes[r][c].pop();
+  const params = findObviousSingles(notes, grid);
+  if (params) {
+    fill(params.num, params.r, params.c, notes, grid);
+    return true;
+  } else return false;
+}
 
-        fill(num, r, c, notes, grid);
-        return true;
-      }
-    }
-  }
-  return false;
+function hiddenSingles(notes, grid) {
+  const params = findHiddenSingles(notes, grid);
+  if (params) {
+    fill(params.num, params.r, params.c, notes, grid);
+    return true;
+  } else return false;
 }
 
 function updateNotes(num, r, c, notes) {
@@ -241,27 +279,6 @@ function getNotesFreq(notes) {
   return notesFreq;
 }
 
-function hiddenSingles(notes, grid) {
-  const notesFreq = getNotesFreq(notes);
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      for (let num of notes[r][c]) {
-        if (
-          notesFreq.row[r].get(num) == 1 ||
-          notesFreq.col[c].get(num) == 1 ||
-          notesFreq.block[Math.floor(r / 3) * 3 + Math.floor(c / 3)].get(num) ==
-            1
-        ) {
-          notes[r][c] = [];
-          fill(num, r, c, notes, grid);
-          return true;
-        }
-      }
-    }
-  }
-  return false;
-}
-
 function printNotes(notes) {
   let r = 0;
   for (let i of notes) {
@@ -290,7 +307,31 @@ function getFilledGrid(inputGrid, inputfilled) {
 }
 
 function help() {
-  document.getElementById("won").hidden = false;
+  if (wrong.size) {
+    alert("Please clear all the wrong fills before proceeding.");
+    return;
+  }
+  if (inputFilled == 81) {
+    document.getElementById("hint").innerText =
+      "Congratulations we have solved the puzzle!!";
+    showCat();
+    return;
+  }
+  var trick = "Obvious Single";
+  var hinted = findObviousSingles(notes, inputGrid);
+  if (!hinted) {
+    hinted = findHiddenSingles(notes, inputGrid);
+    trick = "Hidden Single";
+  }
+  document.getElementById(hinted.r * 9 + hinted.c).className = "hinted";
+  document.getElementById(
+    "hint"
+  ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
+}
+
+function showCat() {
+  document.getElementById("cat").hidden = false;
   const audio = document.getElementById("sound");
   audio.play();
+  audio.loop = true;
 }

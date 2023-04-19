@@ -27,7 +27,3 @@ The Sudoku tricks used by the solver are:
 ## Contributing
 
 If you would like to contribute to this project, you can fork the repository and make changes as you see fit. If you have any suggestions or find any bugs, please open an issue on the repository or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
