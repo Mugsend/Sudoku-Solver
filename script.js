@@ -9,6 +9,7 @@ const inputGrid = [
   [4, 0, 0, 0, 9, 0, 7, 0, 1],
   [0, 0, 0, 0, 0, 4, 2, 0, 0],
 ];
+var notesHidden = true;
 const wrong = new Set();
 var select = -1;
 const notes = getNotes(inputGrid);
@@ -43,7 +44,7 @@ var inputFilled = 0;
         cell.className = "filled";
       } else {
         cell.className = "empty";
-        cell.innerText = notes[i][j].join(" ");
+
         cell.onclick = function () {
           select = this.id;
         };
@@ -99,7 +100,6 @@ function updateGrid(r, c) {
     if (!inputGrid[r][i]) {
       document.getElementById(r * 9 + i).innerText = notes[r][i].join(" ");
     }
-
     let br = r - (r % 3) + Math.floor(i / 3);
     let bc = c - (c % 3) + (i % 3);
     if (!inputGrid[br][bc]) {
@@ -334,4 +334,17 @@ function showCat() {
   const audio = document.getElementById("sound");
   audio.play();
   audio.loop = true;
+}
+
+function toggleNotes() {
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (!inputGrid[i][j]) {
+        if (notesHidden)
+          document.getElementById(i * 9 + j).innerText = notes[i][j].join(" ");
+        else document.getElementById(i * 9 + j).innerText = "";
+      }
+    }
+  }
+  notesHidden = !notesHidden;
 }

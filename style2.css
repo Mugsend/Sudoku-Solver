@@ -22,6 +22,7 @@
 .empty {
   font-size: 15px;
 }
+
 .filled {
   font-size: 30px;
   place-items: center;
@@ -31,4 +32,8 @@
 }
 .correct {
   color: green;
+}
+
+.hinted {
+  background-color: red;
 }
