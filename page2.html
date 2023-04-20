@@ -7,16 +7,18 @@
     <title>Sudoku Solver</title>
   </head>
   <body>
-    <h1 class="title">Sudoku Solver</h1>
+    
     <div id="hint">Hints will appear here!</div>
-    <button onclick="toggleNotes()">Toggel Notes</button>
-    <div class="">
+    
+    <div class="container1">
       <div id="grid"></div>
-      <div id="keyboard"></div>
+      <div class="container2"><button onclick="toggleNotes()">Toggle Notes</button>
+        <button onclick="help()">Hint!</button>
+        <div id="keyboard"></div></div>
     </div>
-    <button onclick="help()">help</button>
+    
     <div id="won" hidden="true">
-      <h1 style="color: red">SOLVED!!!!</h1>
+      <h1>SOLVED!!!!</h1>
     </div>
     
     

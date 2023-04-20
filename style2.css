@@ -1,13 +1,76 @@
 .title {
   text-align: center;
+  color: rgb(255, 255, 255);
+  font-size: 50px;
+  
+  
 }
+
+body{
+  
+  font-family: "Anuphan", sans-serif;
+  background: url(Images/backgrounds/6193485.jpg);
+  background-size: cover;
+  
+}
+
+.container1{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30%;
+  margin-top: 8%;
+  
+}
+
+.container2{
+  margin-right:auto; 
+  margin-left: 20px;
+}
+
+.container2 > button{
+  border-radius: 10px;
+  padding: 15px;
+  border: none;
+  margin-bottom: 20px;
+  background-color: rgb(255, 255, 255);
+  font-family: "Anuphan", sans-serif;
+  font-size: large;
+}
+
+#keyboard > button{
+  border: none;
+  font-size: 40px;
+  width: 80px;
+  height: 50px;
+  margin: 3px;
+  float: left;
+  color: rgb(0, 0, 0);
+  background-color: antiquewhite;
+  border-radius: 5px;
+  
+}
+
+#keyboard > button:nth-child(3n+1){
+  clear: left;
+  
+  
+}
+
 #grid {
-  margin: auto;
+  margin-left: auto;
+  margin-right: 20px;
   display: grid;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
   width: fit-content;
-  border: 1px black solid;
+  color: white;
+
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37)
 }
 #grid * {
   border: 0.1px solid black;
@@ -15,6 +78,23 @@
   height: 50px;
   display: grid;
 }
+
+#grid > div:nth-child(9n + 1) {
+  border-left: none;
+}
+
+#grid > div:nth-child(9n) {
+  border-right: none;
+}
+
+#grid > div:nth-child(-n + 9) {
+  border-top: none;
+}
+
+#grid > div:nth-last-child(-n + 9) {
+  border-bottom: none;
+}
+
 .btn {
   display: block;
   margin: 10px auto;
