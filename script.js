@@ -11,7 +11,7 @@ const inputGrid = [
 ];
 var notesHidden = true;
 const wrong = new Set();
-var select = -1;
+var selectedCellId = -1;
 const notes = getNotes(inputGrid);
 function copyTwoDimensionalArray(arr) {
   const newArray = [];
@@ -23,10 +23,15 @@ function copyTwoDimensionalArray(arr) {
 
 (function keyboard() {
   const keyboard = document.getElementById("keyboard");
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= 10; i++) {
     const button = document.createElement("button");
-    button.innerText = i;
-    button.onclick = () => fillNumber(i);
+    if (i == 10) {
+      button.innerText = "Delete";
+      button.onclick = () => deleteNum();
+    } else {
+      button.innerText = i;
+      button.onclick = () => fillNumber(i);
+    }
     keyboard.appendChild(button);
   }
 })();
@@ -46,7 +51,7 @@ var inputFilled = 0;
         cell.className = "empty";
 
         cell.onclick = function () {
-          select = this.id;
+          selectCell(this.id);
         };
       }
       grid.appendChild(cell);
@@ -54,42 +59,69 @@ var inputFilled = 0;
   }
 })();
 
+function selectCell(id) {
+  selectedCellId = id;
+  const selected = document.getElementsByClassName("selected");
+  for (let i = 0; i < selected.length; i++) {
+    if (selected[i].className == "filled incorrect selected")
+      selected[i].className = "filled incorrect";
+    else selected[i].className = "empty";
+  }
+  if (document.getElementById(id).className == "filled incorrect")
+    document.getElementById(id).className = "filled incorrect selected";
+  else document.getElementById(id).className = "empty selected";
+}
 const filledGrid = getFilledGrid(inputGrid, inputFilled);
 
 document.addEventListener("keydown", function (event) {
   if (event.key >= "0" && event.key <= "9") {
     let n = parseInt(event.key);
-    fillNumber(n, select);
+    fillNumber(n);
   }
 });
 
 function fillNumber(n) {
-  if (select != -1) {
-    const i = Math.floor(select / 9);
-    const j = select % 9;
+  if (selectedCellId != -1) {
+    const i = Math.floor(selectedCellId / 9);
+    const j = selectedCellId % 9;
     if (n) {
-      document.getElementById(select).innerText = n;
+      if (n == inputGrid[i][j]) {
+        deleteNum();
+        return;
+      }
+      document.getElementById(selectedCellId).innerText = n;
       inputGrid[i][j] = n;
       num = filledGrid[i][j];
       if (n == num) {
-        wrong.delete(select);
+        wrong.delete(selectedCellId);
         inputFilled++;
-        document.getElementById(select).className = "filled correct";
-        document.getElementById(select).onclick = "";
+        document.getElementById(selectedCellId).className = "filled correct";
+        document.getElementById(selectedCellId).onclick = "";
         notes[i][j] = [];
         updateNotes(n, i, j, notes);
-        updateGrid(i, j);
+        if (!notesHidden) updateGrid(i, j);
         if (inputFilled == 81) help();
       } else {
-        document.getElementById(select).className = "filled incorrect";
-        wrong.add(select);
+        document.getElementById(selectedCellId).className = "filled incorrect";
+        wrong.add(selectedCellId);
       }
     } else {
-      document.getElementById(select).innerText = notes[i][j].join(" ");
-      document.getElementById(select).className = "empty";
+      deleteNum();
     }
-    select = -1;
+    selectedCellId = -1;
   }
+}
+
+function deleteNum() {
+  if (selectedCellId == -1) return;
+  const i = Math.floor(selectedCellId / 9);
+  const j = selectedCellId % 9;
+  wrong.delete(selectedCellId);
+  document.getElementById(selectedCellId).className = "empty";
+  inputGrid[i][j] = 0;
+  if (!notesHidden)
+    document.getElementById(selectedCellId).innerHTML = notes[i][j].join(" ");
+  else document.getElementById(selectedCellId).innerHTML = "";
 }
 
 function updateGrid(r, c) {
