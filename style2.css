@@ -55,10 +55,11 @@ body{
 
 #keyboard > button:nth-child(3n+1){
   clear: left;
-  
-  
 }
 
+#keyboard > button:nth-child(10){
+  font-size: 20px;
+}
 #grid {
   margin-left: auto;
   margin-right: 20px;
