@@ -1,84 +1,84 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 .title {
   text-align: center;
   color: rgb(255, 255, 255);
   font-size: 50px;
-  
-  
 }
 
 body{
   
-  font-family: "Anuphan", sans-serif;
-  background: url(Images/backgrounds/6193485.jpg);
-  background-size: cover;
+font-family: "Anuphan", sans-serif;
   
+/* background: url(Images/backgrounds/6193485.jpg); */
+  
+background-size: cover;
 }
 
-.container1{
+.container{
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
-  margin-left: 30%;
-  margin-top: 8%;
-  
+  width: 100vw;
+  padding: 0 10px;
+  justify-content: space-evenly;
+}
+.container >*{
+  margin-top: 10px;
 }
 
-.container2{
-  margin-right:auto; 
-  margin-left: 20px;
+.section{
+  margin: 10px 0;
+  text-align: center;
 }
-
-.container2 > button{
-  border-radius: 10px;
-  padding: 15px;
-  border: none;
-  margin-bottom: 20px;
-  background-color: rgb(255, 255, 255);
-  font-family: "Anuphan", sans-serif;
-  font-size: large;
-}
-
 #keyboard > button{
   border: none;
-  font-size: 40px;
-  width: 80px;
-  height: 50px;
+  font-size: 20px;
+  max-width: 50px;
+  max-height: 50px;
+  width: 8vw;
+  height: 8vw;
   margin: 3px;
   float: left;
-  color: rgb(255, 255, 255);
-  background-color: rgb(0, 0, 0);
+  background-color: rgb(255 255 255);
   border-radius: 5px;
-  border:1px solid white;
-  
+  border: 1px solid black;
 }
 
-#keyboard > button:nth-child(3n+1){
-  clear: left;
+.menu{display: flex;justify-content: space-between;}
+.menu>button{
+  background-color: rgb(255, 255, 255);
+  padding: 5px;
+  border: 1px solid black;
 }
 
-#keyboard > button:nth-child(10){
-  font-size: 20px;
+#keyboard > button:nth-child(10){max-width: 90px;width: 30vw;}
+
+#keyboard{
+  width: 168px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 #grid {
-  margin-left: auto;
-  margin-right: 20px;
+  width: fit-content;
   display: grid;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
-  width: fit-content;
-  color: white;
-
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
   border-radius: 10px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37)
 }
 #grid * {
   border: 0.1px solid black;
-  width: 50px;
-  height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  width: 10vw;
+  height: 10vw;
   display: grid;
+  padding: 5px;
 }
 
 #grid > div:nth-child(9n + 1) {
@@ -102,12 +102,12 @@ body{
   margin: 10px auto;
 }
 .empty {
-  font-size: 15px;
+  font-size: 8px;
 }
 
 .filled {
-  font-size: 30px;
   place-items: center;
+  font-size: 25px;
 }
 .incorrect {
   color: red;
@@ -124,6 +124,16 @@ body{
   background-color: yellow;
 }
 
-#hint{
-  color: white;
+#hint{text-align: center;}
+
+@media only screen and (max-width: 780px) {
+  .container{
+    flex-direction: row;
+  }
+  .container1{
+  }
+  #keyboard{
+    width: 100%;
+    flex-direction: row;
+  }
 }
