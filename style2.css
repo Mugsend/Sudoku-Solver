@@ -2,21 +2,21 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Anuphan", sans-serif;
 }
 
-.title {
+h1 {
   text-align: center;
-  color: rgb(255, 255, 255);
-  font-size: 50px;
+  color: #191825;
+  font-size: 50px;  
 }
 
 body{
-  
-font-family: "Anuphan", sans-serif;
-  
-/* background: url(Images/backgrounds/6193485.jpg); */
-  
+    
+padding: 80px 50px;
+background: #222831;
 background-size: cover;
+    
 }
 
 .container{
@@ -34,26 +34,49 @@ background-size: cover;
 .section{
   margin: 10px 0;
   text-align: center;
+    display: inline-block
 }
+
 #keyboard > button{
-  border: none;
+  background-color: black;
   font-size: 20px;
   max-width: 50px;
   max-height: 50px;
-  width: 8vw;
+  width: 9vw;
   height: 8vw;
   margin: 3px;
   float: left;
-  background-color: rgb(255 255 255);
-  border-radius: 5px;
-  border: 1px solid black;
+  border-radius: 10px;
+  color: #00ADB5;
 }
 
-.menu{display: flex;justify-content: space-between;}
+.container2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.menu{
+    display: flex;
+    justify-content: space-between;
+}
+
+#nid.active{
+    background-color:black;
+    color:#00ADB5;
+}
 .menu>button{
-  background-color: rgb(255, 255, 255);
-  padding: 5px;
+    
+ background-color:  #00ADB5;
+  padding: 15px;
   border: 1px solid black;
+  border-radius: 5px;  
+    font-family: "Anuphan", sans-serif;
+    font-size: 20px;
+    margin: 5px;
+    box-shadow: 2px 2px;
+    
 }
 
 #keyboard > button:nth-child(10){max-width: 90px;width: 30vw;}
@@ -63,22 +86,29 @@ background-size: cover;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+    
 }
+
 #grid {
   width: fit-content;
   display: grid;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
   border-radius: 10px;
+  
+  color: #EEEEEE;
+  background-color: #393E46;
 }
+
 #grid * {
-  border: 0.1px solid black;
+  border: 1px solid black;
   max-width: 50px;
   max-height: 50px;
   width: 10vw;
   height: 10vw;
   display: grid;
   padding: 5px;
+
 }
 
 #grid > div:nth-child(9n + 1) {
@@ -117,14 +147,24 @@ background-size: cover;
 }
 
 .hinted {
-  background-color: red;
+  background-color: aqua;
 }
 
 .selected{
-  background-color: yellow;
+  background-color:  yellow;
 }
 
-#hint{text-align: center;}
+#hint{
+text-align: center;
+color: white;
+height: auto;
+    max-width: 300px;
+    padding: 20px;
+    background: #212121;
+    
+     border: 2px solid #00ADB5;
+    border-radius: 10px;
+}
 
 @media only screen and (max-width: 780px) {
   .container{

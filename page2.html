@@ -7,21 +7,24 @@
     <title>Sudoku Solver</title>
   </head>
   <body>
-    <div class="section">
-      <h1 style="text-align: center">Sudoku Solver</h1>
-      <button>Generate New</button>
+    
+    <div class="container">
+        <div class="section">
+      
+      
       <div class="section">
         <div id="hint">Hints will appear here!</div>
       </div>
     </div>
-    <div class="container">
       <div class="container1">
         <div id="grid" class="section"></div>
       </div>
       <div class="container2">
         <div class="menu section">
+            <button>New Game</button>
           <button onclick="help()">Hint!</button
-          ><button onclick="toggleNotes()">Toggle Notes</button>
+          ><button id="nid" onclick="toggleNotes()">Notes</button>
+            
         </div>
         <div id="keyboard" class="section"></div>
       </div>

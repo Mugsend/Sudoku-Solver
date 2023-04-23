@@ -367,8 +367,8 @@ function showCat() {
   audio.play();
   audio.loop = true;
 }
-
-function toggleNotes() {
+const notesbtn = document.getElementById('nid');
+function toggleNotes() { 
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
       if (!inputGrid[i][j]) {
@@ -379,4 +379,9 @@ function toggleNotes() {
     }
   }
   notesHidden = !notesHidden;
+  
 }
+
+notesbtn.addEventListener("click", function(){
+    this.classList.toggle("active");
+})
