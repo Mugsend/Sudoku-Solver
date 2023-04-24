@@ -46,8 +46,9 @@ background-size: cover;
   height: 8vw;
   margin: 3px;
   float: left;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #00ADB5;
+    border: none;
 }
 
 .container2{
@@ -70,12 +71,12 @@ background-size: cover;
     
  background-color:  #00ADB5;
   padding: 15px;
-  border: 1px solid black;
+  border: 2px solid black;
   border-radius: 5px;  
     font-family: "Anuphan", sans-serif;
     font-size: 20px;
     margin: 5px;
-    box-shadow: 2px 2px;
+    
     
 }
 
@@ -109,6 +110,10 @@ background-size: cover;
   display: grid;
   padding: 5px;
 
+}
+
+#keyboard button.active{
+    border:2px solid #00ADB5;
 }
 
 #grid > div:nth-child(9n + 1) {
@@ -160,8 +165,8 @@ color: white;
 height: auto;
     max-width: 300px;
     padding: 20px;
-    background: #212121;
-    
+    background: black;
+    font-size: 20px;
      border: 2px solid #00ADB5;
     border-radius: 10px;
 }

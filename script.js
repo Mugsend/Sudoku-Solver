@@ -385,3 +385,20 @@ function toggleNotes() {
 notesbtn.addEventListener("click", function(){
     this.classList.toggle("active");
 })
+
+const myButtons = document.querySelectorAll("#keyboard button");
+
+
+myButtons.forEach(function(button) {
+  button.addEventListener("mousedown", function() {
+    this.classList.add("active");
+  });
+  
+  button.addEventListener("mouseup", function() {
+    this.classList.remove("active");
+  });
+  
+  button.addEventListener("mouseleave", function() {
+    this.classList.remove("active");
+  });
+});
