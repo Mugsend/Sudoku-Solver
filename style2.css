@@ -97,8 +97,8 @@ background-size: cover;
   grid-template-rows: repeat(9, auto);
   border-radius: 10px;
   
-  color: #EEEEEE;
-  background-color: #393E46;
+  color: #000000;
+  background-color: #e2e5ea;
 }
 
 #grid * {
