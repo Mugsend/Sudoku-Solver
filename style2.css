@@ -24,10 +24,9 @@ background-size: cover;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  width: 100vw;
+  /* width: 100vw; */
   padding: 0 10px;
   justify-content: space-evenly;
-  
 }
 .container >*{
   margin-top: 10px;
@@ -112,12 +111,11 @@ background-size: cover;
   padding: 10px;
   background-color: #000000;
   width: 500px;
-  height: 300px;
+  /* height: 300px; */
   font-size: large;
   padding: 20px;
   bottom: 200px;
   left: 170px;
-  
 }
 
 #nxtbtn{
