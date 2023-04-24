@@ -411,16 +411,16 @@ menus - just click on the cell you want to fill and press the
 number from the keypad.
 
 Press the NEW GAME button to generate a random
-puzzle set to solve each time.`, `The NOTES Button is like super hint button.
+puzzle set to solve each time.`, `The NOTES Button is like a super hint button.
 
-Toggling it will show or hide you the optimal algorithmic 
+Toggling it will show or hide the optimal algorithmic 
 way a computer program solves sudoku,that is each blank 
 cell will show the number(s) in superscripted 
 text that has/have the possibility of occurence with 
 respect to the values in the pre-filled/non-blank cells.
 
 The values of the NOTES also change dynamically
-as you input your custom values.`, "HAVE FUN SOLVING SUDOKU",""];
+as you input custom values.`, "HAVE FUN SOLVING SUDOKU",""];
 const textElement = document.getElementById("cardcontent");
 const button = document.getElementById("nxtbtn");
 
