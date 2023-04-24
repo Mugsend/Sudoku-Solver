@@ -16,6 +16,7 @@ body{
 padding: 80px 50px;
 background: #222831;
 background-size: cover;
+
     
 }
 
@@ -26,6 +27,7 @@ background-size: cover;
   width: 100vw;
   padding: 0 10px;
   justify-content: space-evenly;
+  
 }
 .container >*{
   margin-top: 10px;
@@ -34,7 +36,8 @@ background-size: cover;
 .section{
   margin: 10px 0;
   text-align: center;
-    display: inline-block
+    display: inline-block;
+    position: relative;
 }
 
 #keyboard > button{
@@ -100,6 +103,32 @@ background-size: cover;
   color: #000000;
   background-color: #e2e5ea;
 }
+#card1{
+  z-index: 2;
+  position: absolute;
+  color: white;
+  border: 2px solid #00ADB5;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #000000;
+  width: 500px;
+  height: 300px;
+  font-size: large;
+  padding: 20px;
+  bottom: 200px;
+  left: 170px;
+  
+}
+
+#nxtbtn{
+  position:absolute;
+  bottom:15px;
+  right: 15px;
+  padding: 5px;
+  font-size: medium;
+  background-color: #00ADB5;
+
+}
 
 #grid * {
   border: 1px solid black;
@@ -156,7 +185,7 @@ background-size: cover;
 }
 
 .selected{
-  background-color:  yellow;
+  background-color:  rgb(110, 110, 109);
 }
 
 #hint{
