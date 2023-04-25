@@ -60,6 +60,15 @@ function randomGrid() {
   fillSudoku(0, 3);
   fillSudoku(3, 6);
   fillSudoku(6, 0);
+
+  const nums = [...Array(81)].map((_, i) => i);
+  for (let i = 0; i < 50; i++) {
+    const randInd = Math.floor(Math.random() * nums.length);
+
+    grid[Math.floor(nums[randInd] / 9)][nums[randInd] % 9] = 0;
+    nums.splice(randInd, 1);
+  }
+
   return grid;
 }
 
@@ -409,10 +418,14 @@ function help() {
     hinted = findHiddenSingles(notes, inputGrid);
     trick = "Hidden Single";
   }
-  document.getElementById(hinted.r * 9 + hinted.c).className = "hinted";
-  document.getElementById(
-    "hint"
-  ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
+  if (hinted) {
+    document.getElementById(hinted.r * 9 + hinted.c).className = "hinted";
+    document.getElementById(
+      "hint"
+    ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
+  } else {
+    document.getElementById("hint").innerText = "LMAO no hint";
+  }
 }
 
 function showCat() {

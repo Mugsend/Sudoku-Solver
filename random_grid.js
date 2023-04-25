@@ -59,7 +59,10 @@ function randomGrid() {
   fillSudoku(0, 3);
   fillSudoku(3, 6);
   fillSudoku(6, 0);
+  const nums = [...Array(9)].map((_, i) => i + 1);
+  nums.sort(() => Math.random() - 0.5);
+  nums.map((num) => (grid[Math.floor(num / 9)][num % 9] = 0));
   return grid;
 }
 
-console.log(randomGrid());
+console.log(nums);
