@@ -203,8 +203,7 @@ height: auto;
   .container{
     flex-direction: row;
   }
-  .container1{
-  }
+
   #keyboard{
     width: 100%;
     flex-direction: row;

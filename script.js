@@ -1,4 +1,6 @@
-const inputGrid = randomGrid();
+const solvedSudokuGrid = randomGrid();
+const puzzleSudokuGrid = makePuzzle(solvedSudokuGrid);
+const moves = [];
 function randomGrid() {
   const grid = Array.from({ length: 9 }, () =>
     Array.from({ length: 9 }, () => 0)
@@ -61,6 +63,19 @@ function randomGrid() {
   fillSudoku(3, 6);
   fillSudoku(6, 0);
 
+  return grid;
+}
+
+function makePuzzle(solvedGrid) {
+  const grid = [];
+
+  for (let i = 0; i < 9; i++) {
+    const row = [];
+    for (let j = 0; j < 9; j++) {
+      row.push(solvedGrid[i][j]);
+    }
+    grid.push(row);
+  }
   const nums = [...Array(81)].map((_, i) => i);
   for (let i = 0; i < 50; i++) {
     const randInd = Math.floor(Math.random() * nums.length);
@@ -68,14 +83,14 @@ function randomGrid() {
     grid[Math.floor(nums[randInd] / 9)][nums[randInd] % 9] = 0;
     nums.splice(randInd, 1);
   }
-
+  console.log(grid);
   return grid;
 }
 
 var notesHidden = true;
 const wrong = new Set();
 var selectedCellId = -1;
-const notes = getNotes(inputGrid);
+const notes = getNotes(puzzleSudokuGrid);
 function copyTwoDimensionalArray(arr) {
   const newArray = [];
   for (let i = 0; i < arr.length; i++) {
@@ -106,9 +121,9 @@ var inputFilled = 0;
     for (let j = 0; j < 9; j++) {
       const cell = document.createElement("div");
       cell.id = i * 9 + j;
-      if (inputGrid[i][j]) {
+      if (puzzleSudokuGrid[i][j]) {
         inputFilled++;
-        cell.innerText = inputGrid[i][j];
+        cell.innerText = puzzleSudokuGrid[i][j];
         cell.className = "filled";
       } else {
         cell.className = "empty";
@@ -134,7 +149,6 @@ function selectCell(id) {
     document.getElementById(id).className = "filled incorrect selected";
   else document.getElementById(id).className = "empty selected";
 }
-const filledGrid = getFilledGrid(inputGrid, inputFilled);
 
 document.addEventListener("keydown", function (event) {
   if (event.key >= "0" && event.key <= "9") {
@@ -143,61 +157,79 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
+function idToRowCol(id) {
+  const row = Math.floor(id / 9);
+  const col = id % 9;
+  return { row, col };
+}
 function fillNumber(n) {
   if (selectedCellId != -1) {
-    const i = Math.floor(selectedCellId / 9);
-    const j = selectedCellId % 9;
+    const { row, col } = idToRowCol(selectedCellId);
     if (n) {
-      if (n == inputGrid[i][j]) {
-        deleteNum();
-        return;
-      }
+      moves.push(selectedCellId);
       document.getElementById(selectedCellId).innerText = n;
-      inputGrid[i][j] = n;
-      num = filledGrid[i][j];
-      if (n == num) {
-        wrong.delete(selectedCellId);
-        inputFilled++;
-        document.getElementById(selectedCellId).className = "filled correct";
-        document.getElementById(selectedCellId).onclick = "";
-        notes[i][j] = [];
-        updateNotes(n, i, j, notes);
-        if (!notesHidden) updateGrid(i, j);
-        if (inputFilled == 81) help();
-      } else {
+      if (!notes[row][col].includes(n)) {
         document.getElementById(selectedCellId).className = "filled incorrect";
         wrong.add(selectedCellId);
+        return;
       }
+      puzzleSudokuGrid[row][col] = n;
+      wrong.delete(selectedCellId);
+      inputFilled++;
+      document.getElementById(selectedCellId).className = "filled";
+      notes[row][col] = [];
+      updateNotes(n, row, col, notes);
+      if (!notesHidden) updateGrid(row, col);
+      if (inputFilled == 81) help();
+      puzzleSudokuGrid[row][col] = n;
+      num = solvedSudokuGrid[row][col];
     } else {
-      deleteNum();
+      deleteNum(selectedCellId);
     }
     selectedCellId = -1;
   }
 }
 
-function deleteNum() {
-  if (selectedCellId == -1) return;
-  const i = Math.floor(selectedCellId / 9);
-  const j = selectedCellId % 9;
-  wrong.delete(selectedCellId);
-  document.getElementById(selectedCellId).className = "empty";
-  inputGrid[i][j] = 0;
-  if (!notesHidden)
-    document.getElementById(selectedCellId).innerHTML = notes[i][j].join(" ");
-  else document.getElementById(selectedCellId).innerHTML = "";
+function deleteNum(id) {
+  document.getElementById(id).innerHTML = "";
+  const { row, col } = idToRowCol(id);
+  wrong.delete(id);
+  document.getElementById(id).className = "empty";
+  puzzleSudokuGrid[row][col] = 0;
+  const br = row - (row % 3);
+  const bc = col - (col % 3);
+
+  for (let i = 0; i < 9; i++) {
+    console.log(br + Math.floor(i / 3), bc + (i % 3));
+    if (!puzzleSudokuGrid[row][i])
+      notes[row][i] = getCellNotes(row, i, puzzleSudokuGrid);
+    if (!puzzleSudokuGrid[i][col])
+      notes[i][col] = getCellNotes(i, col, puzzleSudokuGrid);
+    if (!puzzleSudokuGrid[br + Math.floor(i / 3)][bc + (i % 3)]);
+    notes[br + Math.floor(i / 3)][bc + (i % 3)] = getCellNotes(
+      br + Math.floor(i / 3),
+      bc + (i % 3),
+      puzzleSudokuGrid
+    );
+  }
+  if (!notesHidden) updateGrid(row, col);
+}
+
+function undo() {
+  if (moves.length) deleteNum(moves.pop());
 }
 
 function updateGrid(r, c) {
   for (let i = 0; i < 9; i++) {
-    if (!inputGrid[i][c]) {
+    if (!puzzleSudokuGrid[i][c]) {
       document.getElementById(i * 9 + c).innerText = notes[i][c].join(" ");
     }
-    if (!inputGrid[r][i]) {
+    if (!puzzleSudokuGrid[r][i]) {
       document.getElementById(r * 9 + i).innerText = notes[r][i].join(" ");
     }
     let br = r - (r % 3) + Math.floor(i / 3);
     let bc = c - (c % 3) + (i % 3);
-    if (!inputGrid[br][bc]) {
+    if (!puzzleSudokuGrid[br][bc]) {
       document.getElementById(br * 9 + bc).innerText = notes[br][bc].join(" ");
     }
   }
@@ -390,17 +422,6 @@ function printNotes(notes) {
   }
 }
 
-function getFilledGrid(inputGrid, inputfilled) {
-  const grid = copyTwoDimensionalArray(inputGrid);
-  const notes = getNotes(grid);
-  var filled = inputfilled;
-  while (filled != 81) {
-    if (!obviousSingles(notes, grid)) hiddenSingles(notes, grid);
-    filled++;
-  }
-  return grid;
-}
-
 function help() {
   if (wrong.size) {
     alert("Please clear all the wrong fills before proceeding.");
@@ -413,13 +434,13 @@ function help() {
     return;
   }
   var trick = "Obvious Single";
-  var hinted = findObviousSingles(notes, inputGrid);
+  var hinted = findObviousSingles(notes, puzzleSudokuGrid);
   if (!hinted) {
-    hinted = findHiddenSingles(notes, inputGrid);
+    hinted = findHiddenSingles(notes, puzzleSudokuGrid);
     trick = "Hidden Single";
   }
   if (hinted) {
-    document.getElementById(hinted.r * 9 + hinted.c).className = "hinted";
+    document.getElementById(hinted.r * 9 + hinted.c).className = "empty hinted";
     document.getElementById(
       "hint"
     ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
@@ -428,17 +449,11 @@ function help() {
   }
 }
 
-function showCat() {
-  document.getElementById("cat").hidden = false;
-  const audio = document.getElementById("sound");
-  audio.play();
-  audio.loop = true;
-}
 const notesbtn = document.getElementById("nid");
 function toggleNotes() {
   for (let i = 0; i < 9; i++) {
     for (let j = 0; j < 9; j++) {
-      if (!inputGrid[i][j]) {
+      if (!puzzleSudokuGrid[i][j]) {
         if (notesHidden)
           document.getElementById(i * 9 + j).innerText = notes[i][j].join(" ");
         else document.getElementById(i * 9 + j).innerText = "";
