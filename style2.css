@@ -111,7 +111,7 @@ background-size: cover;
   padding: 10px;
   background-color: #000000;
   width: 500px;
-  /* height: 300px; */
+  height: 300px;
   font-size: large;
   padding: 20px;
   bottom: 200px;
@@ -203,10 +203,12 @@ height: auto;
   .container{
     flex-direction: row;
   }
-  .container1{
-  }
   #keyboard{
     width: 100%;
     flex-direction: row;
   }
+    #card1{
+        left:0 ;
+        
+    }
 }
