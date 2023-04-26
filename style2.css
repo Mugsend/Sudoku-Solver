@@ -1,4 +1,4 @@
-*{
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -8,19 +8,16 @@
 h1 {
   text-align: center;
   color: #191825;
-  font-size: 50px;  
+  font-size: 50px;
 }
 
-body{
-    
-padding: 80px 50px;
-background: #222831;
-background-size: cover;
-
-    
+body {
+  padding: 80px 50px;
+  background: #222831;
+  background-size: cover;
 }
 
-.container{
+.container {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -28,18 +25,18 @@ background-size: cover;
   padding: 0 10px;
   justify-content: space-evenly;
 }
-.container >*{
+.container > * {
   margin-top: 10px;
 }
 
-.section{
+.section {
   margin: 10px 0;
   text-align: center;
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
 }
 
-#keyboard > button{
+#keyboard > button {
   background-color: black;
   font-size: 20px;
   max-width: 50px;
@@ -49,47 +46,46 @@ background-size: cover;
   margin: 3px;
   float: left;
   border-radius: 5px;
-  color: #00ADB5;
-    border: none;
+  color: #00adb5;
+  border: none;
 }
 
-.container2{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.container2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.menu{
-    display: flex;
-    justify-content: space-between;
+.menu {
+  display: flex;
+  justify-content: space-between;
 }
 
-#nid.active{
-    background-color:black;
-    color:#00ADB5;
+#nid.active {
+  background-color: black;
+  color: #00adb5;
 }
-.menu>button{
-    
- background-color:  #00ADB5;
+.menu > button {
+  background-color: #00adb5;
   padding: 15px;
   border: 2px solid black;
-  border-radius: 5px;  
-    font-family: "Anuphan", sans-serif;
-    font-size: 20px;
-    margin: 5px;
-    
-    
+  border-radius: 5px;
+  font-family: "Anuphan", sans-serif;
+  font-size: 20px;
+  margin: 5px;
 }
 
-#keyboard > button:nth-child(10){max-width: 90px;width: 30vw;}
+#keyboard > button:nth-child(10) {
+  max-width: 90px;
+  width: 30vw;
+}
 
-#keyboard{
+#keyboard {
   width: 168px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-    
 }
 
 #grid {
@@ -98,19 +94,17 @@ background-size: cover;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
   border-radius: 10px;
-  
   color: #000000;
   background-color: #e2e5ea;
 }
-#card1{
+#card1 {
   z-index: 2;
   position: absolute;
   color: white;
-  border: 2px solid #00ADB5;
+  border: 2px solid #00adb5;
   border-radius: 10px;
   padding: 10px;
   background-color: #000000;
-  width: 500px;
   height: 300px;
   font-size: large;
   padding: 20px;
@@ -118,14 +112,14 @@ background-size: cover;
   left: 170px;
 }
 
-#nxtbtn{
-  position:absolute;
-  bottom:15px;
+#nxtbtn {
+  position: absolute;
+  bottom: 15px;
   right: 15px;
   padding: 5px;
   font-size: medium;
-  background-color: #00ADB5;
-
+  background-color: #00adb5;
+  border: 1px solid black;
 }
 
 #grid * {
@@ -136,11 +130,10 @@ background-size: cover;
   height: 10vw;
   display: grid;
   padding: 5px;
-
 }
 
-#keyboard button.active{
-    border:2px solid #00ADB5;
+#keyboard button.active {
+  border: 2px solid #00adb5;
 }
 
 #grid > div:nth-child(9n + 1) {
@@ -164,6 +157,7 @@ background-size: cover;
   margin: 10px auto;
 }
 .empty {
+  background: #fff;
   font-size: 9px;
   font-weight: 800;
 }
@@ -172,44 +166,54 @@ background-size: cover;
   place-items: center;
   font-size: 25px;
 }
-.incorrect {
-  color: red;
+.prefilled {
+  place-items: center;
+  font-size: 25px;
+  background-color: #e6e6e6;
 }
-.correct {
-  color: green;
+.incorrect {
+  color: rgb(255, 107, 107);
 }
 
 .hinted {
-  background-color: aqua;
+  background-color: #00adb5;
 }
 
-.selected{
-  background-color:  rgb(110, 110, 109);
+.selected {
+  background-color: rgb(255, 251, 0);
 }
 
-#hint{
-text-align: center;
-color: white;
-height: auto;
-    max-width: 300px;
-    padding: 20px;
-    background: black;
-    font-size: 20px;
-     border: 2px solid #00ADB5;
-    border-radius: 10px;
+.pointed {
+  background-color: rgb(255, 92, 92);
+}
+
+#hintBtn {
+  width: 50px;
+  border: 1px solid black;
+}
+
+#hint {
+  text-align: center;
+  color: white;
+  height: auto;
+  max-width: 300px;
+  padding: 20px;
+  background: black;
+  font-size: 20px;
+  border: 2px solid #00adb5;
+  border-radius: 10px;
 }
 
 @media only screen and (max-width: 780px) {
-  .container{
+  .container {
     flex-direction: row;
   }
 
-  #keyboard{
+  #keyboard {
     width: 100%;
     flex-direction: row;
   }
-    #card1{
-        left:0 ;
-        
-    }
+  #card1 {
+    left: 0;
+  }
 }

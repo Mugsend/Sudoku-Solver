@@ -77,27 +77,20 @@ function makePuzzle(solvedGrid) {
     grid.push(row);
   }
   const nums = [...Array(81)].map((_, i) => i);
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 40; i++) {
     const randInd = Math.floor(Math.random() * nums.length);
 
     grid[Math.floor(nums[randInd] / 9)][nums[randInd] % 9] = 0;
     nums.splice(randInd, 1);
   }
-  console.log(grid);
+
   return grid;
 }
 
 var notesHidden = true;
-const wrong = new Set();
-var selectedCellId = -1;
+var wrong = -1;
+var selectedCellId = 0;
 const notes = getNotes(puzzleSudokuGrid);
-function copyTwoDimensionalArray(arr) {
-  const newArray = [];
-  for (let i = 0; i < arr.length; i++) {
-    newArray[i] = arr[i].slice();
-  }
-  return newArray;
-}
 
 (function keyboard() {
   const keyboard = document.getElementById("keyboard");
@@ -105,10 +98,18 @@ function copyTwoDimensionalArray(arr) {
     const button = document.createElement("button");
     if (i == 10) {
       button.innerText = "Delete";
-      button.onclick = () => deleteNum();
+      button.onclick = () => {
+        if (selectedCellId == -1) return;
+        fillNumber(selectedCellId, 0);
+        selectedCellId == -1;
+      };
     } else {
       button.innerText = i;
-      button.onclick = () => fillNumber(i);
+      button.onclick = () => {
+        if (selectedCellId == -1) return;
+        fillNumber(selectedCellId, i);
+        selectCellId = -1;
+      };
     }
     keyboard.appendChild(button);
   }
@@ -124,7 +125,7 @@ var inputFilled = 0;
       if (puzzleSudokuGrid[i][j]) {
         inputFilled++;
         cell.innerText = puzzleSudokuGrid[i][j];
-        cell.className = "filled";
+        cell.className = "prefilled";
       } else {
         cell.className = "empty";
 
@@ -136,24 +137,55 @@ var inputFilled = 0;
     }
   }
 })();
+var id = selectedCellId;
+while (document.getElementById(id).className === "prefilled") id++;
+selectCell(id);
 
 function selectCell(id) {
+  if (selectedCellId != -1)
+    document.getElementById(selectedCellId).classList.remove("selected");
   selectedCellId = id;
-  const selected = document.getElementsByClassName("selected");
-  for (let i = 0; i < selected.length; i++) {
-    if (selected[i].className == "filled incorrect selected")
-      selected[i].className = "filled incorrect";
-    else selected[i].className = "empty";
-  }
-  if (document.getElementById(id).className == "filled incorrect")
-    document.getElementById(id).className = "filled incorrect selected";
-  else document.getElementById(id).className = "empty selected";
+  document.getElementById(selectedCellId).classList.add("selected");
 }
 
 document.addEventListener("keydown", function (event) {
   if (event.key >= "0" && event.key <= "9") {
     let n = parseInt(event.key);
-    fillNumber(n);
+    if (selectedCellId == -1) return;
+    fillNumber(selectedCellId, n);
+    selectedCellId = -1;
+  } else if (event.key === "ArrowUp") {
+    if (selectedCellId > 8) {
+      var id = selectedCellId - 9;
+      while (id >= 0 && document.getElementById(id).className === "prefilled")
+        id -= 9;
+
+      if (id >= 0) selectCell(id);
+    }
+  } else if (event.key === "ArrowDown") {
+    if (selectedCellId < 72) {
+      var id = selectedCellId + 9;
+      while (id <= 80 && document.getElementById(id).className === "prefilled")
+        id += 9;
+
+      if (id <= 80) selectCell(id);
+    }
+  } else if (event.key === "ArrowLeft") {
+    if (selectedCellId > 0) {
+      var id = selectedCellId - 1;
+      while (id >= 0 && document.getElementById(id).className === "prefilled")
+        id -= 1;
+
+      if (id >= 0) selectCell(id);
+    }
+  } else if (event.key === "ArrowRight") {
+    if (selectedCellId < 80) {
+      var id = selectedCellId + 1;
+      while (id <= 80 && document.getElementById(id).className === "prefilled")
+        id += 1;
+
+      if (id <= 80) selectCell(id);
+    }
   }
 });
 
@@ -162,61 +194,114 @@ function idToRowCol(id) {
   const col = id % 9;
   return { row, col };
 }
-function fillNumber(n) {
-  if (selectedCellId != -1) {
-    const { row, col } = idToRowCol(selectedCellId);
-    if (n) {
-      moves.push(selectedCellId);
-      document.getElementById(selectedCellId).innerText = n;
-      if (!notes[row][col].includes(n)) {
-        document.getElementById(selectedCellId).className = "filled incorrect";
-        wrong.add(selectedCellId);
-        return;
-      }
-      puzzleSudokuGrid[row][col] = n;
-      wrong.delete(selectedCellId);
+function fillNumber(id, n) {
+  const { row, col } = idToRowCol(id);
+  if (wrong != -1) {
+    if (wrong != id) {
+      alert("Please clear all the wrong fills before proceeding.");
+      return;
+    }
+    removePointed(row, col);
+    wrong = -1;
+  }
+  resetCell(id);
+  if (n) {
+    puzzleSudokuGrid[row][col] = n;
+    const moveInd = moves.indexOf(id);
+    if (moveInd != -1) {
+      moves.splice(moveInd, 0);
+    }
+    moves.push(id);
+    const selectedEle = document.getElementById(id);
+    selectedEle.innerText = n;
+    if (selectedEle.classList.contains("hinted")) {
+      document.getElementById("hint").innerHTML = "Hints will appear here!";
+    }
+    if (!notes[row][col].includes(n)) {
+      selectedEle.className = "filled incorrect";
+      pointNums(row, col, n);
+      wrong = id;
+    } else {
       inputFilled++;
-      document.getElementById(selectedCellId).className = "filled";
+      selectedEle.className = "filled";
       notes[row][col] = [];
       updateNotes(n, row, col, notes);
       if (!notesHidden) updateGrid(row, col);
       if (inputFilled == 81) help();
-      puzzleSudokuGrid[row][col] = n;
-      num = solvedSudokuGrid[row][col];
-    } else {
-      deleteNum(selectedCellId);
     }
-    selectedCellId = -1;
+  } else {
+    deleteNum(id);
+  }
+  selectedEle.classList.remove("selected");
+}
+
+function pointNums(row, col, n) {
+  const br = row - (row % 3);
+  const bc = col - (col % 3);
+  for (let i = 0; i < 9; i++) {
+    if (puzzleSudokuGrid[row][i] == n && i != col)
+      document.getElementById(row * 9 + i).classList.add("pointed");
+    if (puzzleSudokuGrid[i][col] == n && i != row)
+      document.getElementById(i * 9 + col).classList.add("pointed");
+    if (
+      puzzleSudokuGrid[br + Math.floor(i / 3)][bc + (i % 3)] == n &&
+      (br + Math.floor(i / 3) != row || bc + (i % 3) != col)
+    )
+      document
+        .getElementById((br + Math.floor(i / 3)) * 9 + bc + (i % 3))
+        .classList.add("pointed");
   }
 }
 
+function removePointed(row, col) {
+  const br = row - (row % 3);
+  const bc = col - (col % 3);
+  for (let i = 0; i < 9; i++) {
+    if (puzzleSudokuGrid[row][i] && i != col)
+      document.getElementById(row * 9 + i).classList.remove("pointed");
+    if (puzzleSudokuGrid[i][col] && i != row)
+      document.getElementById(i * 9 + col).classList.remove("pointed");
+    if (
+      puzzleSudokuGrid[br + Math.floor(i / 3)][bc + (i % 3)] &&
+      (br + Math.floor(i / 3) != row || bc + (i % 3) != col)
+    )
+      document
+        .getElementById((br + Math.floor(i / 3)) * 9 + bc + (i % 3))
+        .classList.remove("pointed");
+  }
+}
 function deleteNum(id) {
   document.getElementById(id).innerHTML = "";
-  const { row, col } = idToRowCol(id);
-  wrong.delete(id);
   document.getElementById(id).className = "empty";
+  const { row, col } = idToRowCol(id);
+  if (!notesHidden) updateGrid(row, col);
+}
+
+function resetCell(id) {
+  const { row, col } = idToRowCol(id);
   puzzleSudokuGrid[row][col] = 0;
   const br = row - (row % 3);
   const bc = col - (col % 3);
 
   for (let i = 0; i < 9; i++) {
-    console.log(br + Math.floor(i / 3), bc + (i % 3));
     if (!puzzleSudokuGrid[row][i])
       notes[row][i] = getCellNotes(row, i, puzzleSudokuGrid);
     if (!puzzleSudokuGrid[i][col])
       notes[i][col] = getCellNotes(i, col, puzzleSudokuGrid);
-    if (!puzzleSudokuGrid[br + Math.floor(i / 3)][bc + (i % 3)]);
-    notes[br + Math.floor(i / 3)][bc + (i % 3)] = getCellNotes(
-      br + Math.floor(i / 3),
-      bc + (i % 3),
-      puzzleSudokuGrid
-    );
+    if (!puzzleSudokuGrid[br + Math.floor(i / 3)][bc + (i % 3)])
+      notes[br + Math.floor(i / 3)][bc + (i % 3)] = getCellNotes(
+        br + Math.floor(i / 3),
+        bc + (i % 3),
+        puzzleSudokuGrid
+      );
   }
-  if (!notesHidden) updateGrid(row, col);
 }
-
 function undo() {
-  if (moves.length) deleteNum(moves.pop());
+  if (moves.length) {
+    id = moves.pop();
+    fillNumber(id, 0);
+    selectCell(id);
+  }
 }
 
 function updateGrid(r, c) {
@@ -423,14 +508,13 @@ function printNotes(notes) {
 }
 
 function help() {
-  if (wrong.size) {
+  if (wrong != -1) {
     alert("Please clear all the wrong fills before proceeding.");
     return;
   }
   if (inputFilled == 81) {
     document.getElementById("hint").innerText =
       "Congratulations we have solved the puzzle!!";
-    showCat();
     return;
   }
   var trick = "Obvious Single";
@@ -440,12 +524,26 @@ function help() {
     trick = "Hidden Single";
   }
   if (hinted) {
-    document.getElementById(hinted.r * 9 + hinted.c).className = "empty hinted";
-    document.getElementById(
-      "hint"
-    ).innerText = `${trick} at the highlighted cell and it can be filled with ${hinted.num}!`;
+    const id = hinted.r * 9 + hinted.c;
+    const num = hinted.num;
+    document.getElementById(id).className = "empty hinted";
+    const hintEle = document.getElementById("hint");
+    hintEle.innerHTML = "";
+    const hintText = document.createElement("pre");
+    hintText.innerText = `${trick}
+    at the highlighted cell.
+    It can be filled with ${num}!`;
+    hintEle.appendChild(hintText);
+    const okButton = document.createElement("button");
+    okButton.id = "hintBtn";
+    okButton.innerText = "ok";
+    okButton.onclick = () => {
+      fillNumber(id, num);
+      hintEle.innerText = "Hints will appear here!";
+    };
+    hintEle.appendChild(okButton);
   } else {
-    document.getElementById("hint").innerText = "LMAO no hint";
+    hintEle.innerText = "LMAO no hint";
   }
 }
 
