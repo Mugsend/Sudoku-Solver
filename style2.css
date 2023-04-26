@@ -110,6 +110,7 @@ body {
   padding: 20px;
   bottom: 200px;
   left: 170px;
+  width: 500px;
 }
 
 #nxtbtn {
@@ -212,8 +213,5 @@ body {
   #keyboard {
     width: 100%;
     flex-direction: row;
-  }
-  #card1 {
-    left: 0;
   }
 }
