@@ -14,7 +14,7 @@
       <div class="container2">
         <div class="menu section">
           <button class="btn" onclick="newGame()">New Game</button>
-          <button class="btn" onclick="help()">Hint!</button>
+          <button class="btn" onclick="hint()">Hint!</button>
           <button class="btn" id="nid" onclick="toggleNotes()">Notes</button>
           <button class="btn" onclick="undo()">Undo</button>
         </div>
@@ -32,14 +32,27 @@
         </div>
       </div>
     </div>
-    <div id="card1">
+    <div id="card1" class="card">
       <p id="cardcontent">
         WELCOME TO SUDOKU SOLVER <br /><br />
         Are you struggling to solve a Sudoku puzzle? <br /><br />Our program is
         here to help! Simply press the given hint button and let it do the work
         for you.
       </p>
+      <button id="skipbtn">Skip</button>
       <button id="nxtbtn">Next</button>
+    </div>
+    <div id="confcard" class="card">
+      <p>
+        Are you sure? This will start a new game and all the current progress
+        will be lost!
+      </p>
+      <button id="confyes">Yes</button>
+      <button id="confno">No</button>
+    </div>
+    <div id="hintcard" class="card">
+      <p id="hintcontent">Hints will show up here!</p>
+      <button id="hintbtn">Fill</button>
     </div>
   </body>
   <script src="script.js" type="text/javascript"></script>

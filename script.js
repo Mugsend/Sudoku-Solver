@@ -191,36 +191,54 @@ function fillNumber(n) {
     removePointed(row, col);
     wrong = -1;
   }
-  resetCell(selectedCellId);
-  if (n) {
+  const selectedEle = document.getElementById(selectedCellId);
+  const num = puzzleSudokuGrid[row][col];
+  if (num) {
+    resetCell(selectedCellId);
+  }
+  if (!n || n === num) {
+    puzzleSudokuGrid[row][col] = 0;
+    deleteNum(selectedCellId);
+  } else {
     puzzleSudokuGrid[row][col] = n;
-
     const moveInd = moves.indexOf(selectedCellId);
     if (moveInd != -1) {
-      moves.splice(moveInd, 0);
+      moves.splice(moveInd, 1);
     }
     moves.push(selectedCellId);
-    const selectedEle = document.getElementById(selectedCellId);
-    selectedEle.classList.remove("empty");
-    selectedEle.classList.remove("incorrect");
-    selectedEle.classList.add("filled");
+    if (!num) {
+      selectedEle.classList.remove("empty");
+      selectedEle.classList.add("filled");
+    }
     selectedEle.innerText = n;
     if (selectedEle.classList.contains("hinted")) {
-      document.getElementById("hint").remove();
+      document.getElementById("hintcard").style.display = "none";
       selectedEle.classList.remove("hinted");
       document.getElementById(selectedCellId).classList.add("selected");
     }
     if (!notes[row][col].includes(n)) {
-      selectedEle.classList.add("incorrect");
+      if (!selectedEle.classList.contains("incorrect")) {
+        selectedEle.classList.add("incorrect");
+        if (num) {
+          inputFilled--;
+        }
+      }
       pointNums(row, col, n);
       wrong = selectedCellId;
     } else {
+      if (selectedEle.classList.contains("incorrect")) {
+        selectedEle.classList.remove("incorrect");
+        inputFilled++;
+      }
+      if (!num) inputFilled++;
       notes[row][col] = [];
       updateNotes(n, row, col, notes);
       if (!notesHidden) updateGrid(row, col);
     }
-  } else {
-    deleteNum(selectedCellId);
+  }
+  if (inputFilled == 81) {
+    alert("Congratulations you have solved the puzzle successfully!");
+    location.reload();
   }
 }
 
@@ -260,12 +278,19 @@ function removePointed(row, col) {
   }
 }
 function deleteNum(id) {
-  document.getElementById(id).innerHTML = "";
-  document.getElementById(id).classList.remove("filled");
-  document.getElementById(id).classList.remove("incorrect");
-  document.getElementById(id).classList.add("empty");
-  const { row, col } = idToRowCol(id);
-  if (!notesHidden) updateGrid(row, col);
+  if (document.getElementById(id).classList.contains("empty")) return;
+  else {
+    document.getElementById(id).innerText = "";
+    document.getElementById(id).classList.remove("filled");
+    if (document.getElementById(id).classList.contains("incorrect")) {
+      document.getElementById(id).classList.remove("incorrect");
+    } else {
+      inputFilled--;
+    }
+    document.getElementById(id).classList.add("empty");
+    const { row, col } = idToRowCol(id);
+    if (!notesHidden) updateGrid(row, col);
+  }
 }
 
 function resetCell(id) {
@@ -476,11 +501,13 @@ function printNotes(notes) {
   }
 }
 
-function help() {
+function hint() {
   if (wrong != -1) {
     alert("Please clear all the wrong fills before proceeding.");
     return;
   }
+
+  document.getElementById("hintcard").style.display = "block";
   var trick = "Obvious Single";
   var hinted = findObviousSingles(notes, puzzleSudokuGrid);
   if (!hinted) {
@@ -492,19 +519,17 @@ function help() {
     const num = hinted.num;
     document.getElementById(id).className = "empty hinted";
     selectCell(id);
-    const hintEle = document.createElement("div");
-    hintEle.id = "hint";
-    const okButton = document.createElement("button");
-    okButton.id = "hintBtn";
-    okButton.innerText = "Fill";
-    okButton.onclick = () => {
+
+    document.getElementById(
+      "hintcontent"
+    ).innerHTML = `${trick}<br><br>The highlighted cell can be filled with ${num}!<br>`;
+    document.getElementById("hintbtn").onclick = () => {
       fillNumber(num);
     };
-    hintEle.innerHTML = `${trick}<br><br>The highlighted cell can be filled with ${num}!<br>`;
-    hintEle.appendChild(okButton);
-    document.body.appendChild(hintEle);
   } else {
-    hintEle.innerText = "LMAO no hint";
+    document.getElementById("hintcontent").innerText = "LMAO no hint";
+    document.getElementById("hintbtn").onclick = () =>
+      (document.getElementById("hintcard").style.display = "none");
   }
 }
 
@@ -548,21 +573,32 @@ const textArray = [
   "HAVE FUN SOLVING SUDOKU",
   "",
 ];
-const textElement = document.getElementById("cardcontent");
-const button = document.getElementById("nxtbtn");
-
 let i = 0;
 
 function changeText() {
-  textElement.innerHTML = textArray[i];
+  document.getElementById("cardcontent").innerHTML = textArray[i];
   i++;
   if (i === textArray.length) {
     document.getElementById("card1").remove();
   }
 }
 
-button.addEventListener("click", changeText);
+document.getElementById("nxtbtn").addEventListener("click", changeText);
+document
+  .getElementById("skipbtn")
+  .addEventListener("click", () => document.getElementById("card1").remove());
+
+document
+  .getElementById("confyes")
+  .addEventListener("click", () => location.reload());
+
+document
+  .getElementById("confno")
+  .addEventListener(
+    "click",
+    () => (document.getElementById("confcard").style.display = "none")
+  );
 
 function newGame() {
-  location.reload();
+  document.getElementById("confcard").style.display = "block";
 }
