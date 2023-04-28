@@ -56,8 +56,8 @@ h1 {
   display: grid;
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
-  border-radius: 10px;
   background-color: #e2e5ea;
+  border: 1px solid black;
 }
 
 .card {
@@ -116,12 +116,10 @@ h1 {
   right: 10%;
 }
 #grid * {
-  border-left: 1px solid black;
-  border-bottom: 1px solid black;
+  border-left: 1px solid #00adb5;
+  border-bottom: 1px solid #00adb5;
   max-width: 50px;
   max-height: 50px;
-  width: 10vh;
-  height: 10vh;
   display: grid;
   padding: 5px;
 }
@@ -143,12 +141,21 @@ h1 {
   border: 2px solid #00adb5;
 }
 
+#grid > div:nth-child(3n + 1) {
+  border-left: 2px solid #00adb5;
+}
+
 #grid > div:nth-child(9n + 1) {
   border-left: none;
 }
 
 #grid > div:nth-child(9n) {
   border-right: none;
+}
+
+#grid > div:nth-child(n + 19):nth-child(-n + 27),
+#grid > div:nth-child(n + 46):nth-child(-n + 54) {
+  border-bottom: 2px solid #00adb5;
 }
 
 #grid > div:nth-child(-n + 9) {
