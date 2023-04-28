@@ -103,13 +103,13 @@ h1 {
 
 #nxtbtn,
 #confno {
-  bottom: 9%;
-  right: 10%;
+  bottom: 4%;
+  right: 6%;
 }
 #skipbtn,
 #confyes {
-  bottom: 9%;
-  left: 10%;
+  bottom: 4%;
+  left: 6%;
 }
 #hintbtn {
   top: 10%;
@@ -246,7 +246,7 @@ h1 {
   }
 
   #card1 {
-    height: 420px;
+    height: 500px;
     width: 90%;
     top: 50%;
     left: 50%;
