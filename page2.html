@@ -4,21 +4,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="style2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
     <title>Sudoku Solver</title>
   </head>
   <body>
     <div class="container">
       <div class="container1">
-        <div id="grid" class="section"></div>
+        <div id="grid"></div>
       </div>
       <div class="container2">
-        <div class="menu section">
+        <div class="menu">
           <button class="btn" onclick="newGame()">New Game</button>
           <button class="btn" onclick="hint()">Hint!</button>
           <button class="btn" id="nid" onclick="toggleNotes()">Notes</button>
           <button class="btn" onclick="undo()">Undo</button>
         </div>
-        <div id="keyboard" class="section">
+        <div id="keyboard">
           <button class="btn" onclick="fillNumber(1)">1</button>
           <button class="btn" onclick="fillNumber(2)">2</button>
           <button class="btn" onclick="fillNumber(3)">3</button>

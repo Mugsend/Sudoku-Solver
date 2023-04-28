@@ -1,5 +1,4 @@
-const solvedSudokuGrid = randomGrid();
-const puzzleSudokuGrid = makePuzzle(solvedSudokuGrid);
+const puzzleSudokuGrid = randomGrid();
 const moves = [];
 function randomGrid() {
   const grid = Array.from({ length: 9 }, () =>
@@ -63,21 +62,8 @@ function randomGrid() {
   fillSudoku(3, 6);
   fillSudoku(6, 0);
 
-  return grid;
-}
-
-function makePuzzle(solvedGrid) {
-  const grid = [];
-
-  for (let i = 0; i < 9; i++) {
-    const row = [];
-    for (let j = 0; j < 9; j++) {
-      row.push(solvedGrid[i][j]);
-    }
-    grid.push(row);
-  }
   const nums = [...Array(81)].map((_, i) => i);
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 50; i++) {
     const randInd = Math.floor(Math.random() * nums.length);
 
     grid[Math.floor(nums[randInd] / 9)][nums[randInd] % 9] = 0;
@@ -89,7 +75,7 @@ function makePuzzle(solvedGrid) {
 
 var notesHidden = true;
 var wrong = -1;
-var selectedCellId = 0;
+var selectedCellId = -1;
 const notes = getNotes(puzzleSudokuGrid);
 
 var inputFilled = 0;
@@ -114,13 +100,35 @@ var inputFilled = 0;
     }
   }
 })();
-var id = selectedCellId;
+var id = 0;
 while (document.getElementById(id).classList.contains("prefilled")) id++;
 selectCell(id);
 
 function selectCell(id) {
-  document.getElementById(selectedCellId).classList.remove("selected");
+  if (id == selectedCellId) return;
+  var { row, col } = idToRowCol(selectedCellId);
+  if (selectedCellId != -1) {
+    for (let i = 0; i < 9; i++) {
+      document.getElementById(i * 9 + col).classList.remove("shadowed");
+      document.getElementById(row * 9 + i).classList.remove("shadowed");
+      let br = row - (row % 3) + Math.floor(i / 3);
+      let bc = col - (col % 3) + (i % 3);
+      document.getElementById(br * 9 + bc).classList.remove("shadowed");
+    }
+    document.getElementById(selectedCellId).classList.remove("selected");
+  }
+
   selectedCellId = id;
+  var { row, col } = idToRowCol(selectedCellId);
+
+  for (let i = 0; i < 9; i++) {
+    document.getElementById(i * 9 + col).classList.add("shadowed");
+    document.getElementById(row * 9 + i).classList.add("shadowed");
+    let br = row - (row % 3) + Math.floor(i / 3);
+    let bc = col - (col % 3) + (i % 3);
+    document.getElementById(br * 9 + bc).classList.add("shadowed");
+  }
+  document.getElementById(selectedCellId).classList.remove("shadowed");
   if (!document.getElementById(selectedCellId).classList.contains("hinted"))
     document.getElementById(selectedCellId).classList.add("selected");
 }
@@ -390,7 +398,7 @@ function checkBlock(num, r, c, grid) {
   return true;
 }
 
-function findObviousSingles(notes, grid) {
+function obviousSingles(notes) {
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
       if (notes[r][c].length == 1) {
@@ -402,7 +410,7 @@ function findObviousSingles(notes, grid) {
   return;
 }
 
-function findHiddenSingles(notes, grid) {
+function hiddenSingles(notes) {
   const notesFreq = getNotesFreq(notes);
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
@@ -419,6 +427,47 @@ function findHiddenSingles(notes, grid) {
     }
   }
   return;
+}
+
+function lastFreeCell(grid) {
+  function descriptor(found, cell, num) {
+    const desc = {};
+    desc.found = found;
+    desc.r = cell.row;
+    desc.c = cell.col;
+    desc.num = num;
+    console.log(desc);
+    return desc;
+  }
+
+  for (let r = 0; r < 9; r++) {
+    const rowNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const colNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const blockNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let rowEmpty;
+    let colEmpty;
+    let blockEmpty;
+    for (let c = 0; c < 9; c++) {
+      if (grid[r][c]) rowNums.splice(rowNums.indexOf(grid[r][c]), 1);
+      else rowEmpty = { row: r, col: c };
+      if (grid[c][r]) colNums.splice(colNums.indexOf(grid[c][r]), 1);
+      else colEmpty = { row: c, col: r };
+      let br = Math.floor(r / 3) * 3 + Math.floor(c / 3);
+      let bc = (r % 3) * 3 + (c % 3);
+      if (grid[br][bc]) blockNums.splice(blockNums.indexOf(grid[br][bc]), 1);
+      else blockEmpty = { row: br, col: bc };
+      if (c == 8) {
+        if (rowNums.length == 1)
+          return descriptor("row", rowEmpty, rowNums.pop());
+
+        if (colNums.length == 1)
+          return descriptor("col", colEmpty, colNums.pop());
+        if (blockNums.length == 1)
+          return descriptor("block", blockEmpty, blockNums.pop());
+      }
+    }
+  }
+  return null;
 }
 
 function updateNotes(num, r, c, notes) {
@@ -508,13 +557,19 @@ function hint() {
   }
 
   document.getElementById("hintcard").style.display = "block";
-  var trick = "Obvious Single";
-  var hinted = findObviousSingles(notes, puzzleSudokuGrid);
+  var trick = "Last Free Cell";
+  var hinted = lastFreeCell(puzzleSudokuGrid);
+
   if (!hinted) {
-    hinted = findHiddenSingles(notes, puzzleSudokuGrid);
+    trick = "Obvious Single";
+    hinted = obviousSingles(notes, puzzleSudokuGrid);
+  }
+  if (!hinted) {
     trick = "Hidden Single";
+    hinted = hiddenSingles(notes, puzzleSudokuGrid);
   }
   if (hinted) {
+    console.log(hinted);
     const id = hinted.r * 9 + hinted.c;
     const num = hinted.num;
     document.getElementById(id).className = "empty hinted";

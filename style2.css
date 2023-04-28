@@ -2,7 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Anuphan", sans-serif;
+  font-family: "Roboto", sans-serif;
   border: none;
 }
 
@@ -34,13 +34,14 @@ h1 {
   width: 100%;
 }
 .btn {
+  background: #e1feff;
   height: 50px;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 #nid.active {
-  background-color: black;
-  color: #00adb5;
+  background-color: #00f4ff;
+  /* color: #00adb5; */
 }
 .menu > button {
   font-size: 15px;
@@ -49,7 +50,7 @@ h1 {
 }
 
 .menu > button:nth-child(4) {
-  border-right: 1px solid;
+  border-right: 2px solid;
 }
 
 #grid {
@@ -57,12 +58,12 @@ h1 {
   grid-template-columns: repeat(9, auto);
   grid-template-rows: repeat(9, auto);
   background-color: #e2e5ea;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .card {
   color: white;
-  border: 2px solid #00adb5;
+  border: 2px solid #00f4ff;
   border-radius: 10px;
   padding: 10px;
   background-color: #000000;
@@ -85,7 +86,7 @@ h1 {
 .card > button {
   position: absolute;
   font-size: medium;
-  background-color: #00adb5;
+  background-color: #00f4ff;
   border: 1px solid black;
   padding: 7px;
 }
@@ -116,8 +117,8 @@ h1 {
   right: 10%;
 }
 #grid * {
-  border-left: 1px solid #00adb5;
-  border-bottom: 1px solid #00adb5;
+  border-left: 1px solid #000000;
+  border-bottom: 1px solid #000000;
   max-width: 50px;
   max-height: 50px;
   display: grid;
@@ -127,6 +128,7 @@ h1 {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 #keyboard > button {
@@ -141,7 +143,7 @@ h1 {
 }
 
 #grid > div:nth-child(3n + 1) {
-  border-left: 2px solid #00adb5;
+  border-left: 2px solid #000000;
 }
 
 #grid > div:nth-child(9n + 1) {
@@ -154,7 +156,7 @@ h1 {
 
 #grid > div:nth-child(n + 19):nth-child(-n + 27),
 #grid > div:nth-child(n + 46):nth-child(-n + 54) {
-  border-bottom: 2px solid #00adb5;
+  border-bottom: 2px solid #000000;
 }
 
 #grid > div:nth-child(-n + 9) {
@@ -167,8 +169,8 @@ h1 {
 
 .empty {
   font-size: 9px;
-  font-weight: 800;
-  padding-left: 5px;
+  font-weight: 300;
+  padding: 5px;
 }
 
 .empty,
@@ -180,24 +182,31 @@ h1 {
   place-items: center;
   font-size: 25px;
   padding: 5px;
+  font-weight: 300;
 }
+
+.shadowed {
+  background: #efefef;
+}
+
 .prefilled {
-  background-color: #e6e6e6;
+  background-color: #defeff;
 }
+
 .incorrect {
-  color: rgb(255 55 55);
+  color: rgb(255 0 0);
 }
 
 .hinted {
-  background-color: rgb(255, 251, 0);
+  background-color: rgb(255 253 123);
 }
 
 .selected {
-  background-color: #00e9f5;
+  background-color: #bcbbbb;
 }
 
 .pointed {
-  background-color: rgb(255, 92, 92);
+  background-color: rgb(255 135 135);
 }
 
 #hintBtn {
@@ -242,7 +251,7 @@ h1 {
   }
 
   #keyboard > button:nth-child(5n) {
-    border-right: 1px solid;
+    border-right: 2px solid;
   }
 
   #card1 {
@@ -269,12 +278,12 @@ h1 {
   }
 
   #keyboard > button:nth-child(3n) {
-    border-right: 1px solid;
+    border-right: 2px solid;
   }
 
   #keyboard > button:nth-child(10) {
     width: 100%;
-    border-right: 1px solid;
+    border-right: 2px solid;
   }
 
   #keyboard > button {
