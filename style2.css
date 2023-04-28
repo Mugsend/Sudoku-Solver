@@ -121,7 +121,6 @@ h1 {
   max-width: 50px;
   max-height: 50px;
   display: grid;
-  padding: 5px;
 }
 
 #keyboard {
@@ -169,6 +168,7 @@ h1 {
 .empty {
   font-size: 9px;
   font-weight: 800;
+  padding-left: 5px;
 }
 
 .empty,
@@ -179,6 +179,7 @@ h1 {
 .prefilled {
   place-items: center;
   font-size: 25px;
+  padding: 5px;
 }
 .prefilled {
   background-color: #e6e6e6;
