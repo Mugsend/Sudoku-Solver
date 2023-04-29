@@ -249,7 +249,7 @@ h1 {
   }
 
   #keyboard > button:nth-child(5n) {
-    border-right: 2px solid;
+    border-right: 1px solid;
   }
 
   #card1 {
