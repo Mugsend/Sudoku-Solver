@@ -36,7 +36,7 @@ h1 {
 .btn {
   background: #e1feff;
   height: 50px;
-  border: 2px solid black;
+  border: 1px solid black;
 }
 
 #nid.active {
@@ -50,7 +50,7 @@ h1 {
 }
 
 .menu > button:nth-child(4) {
-  border-right: 2px solid;
+  border-right: 1px solid;
 }
 
 #grid {
@@ -184,7 +184,7 @@ h1 {
 }
 
 .shadowed {
-  background: #efefef;
+  background: #e0e0e0;
 }
 
 .prefilled {
@@ -200,7 +200,7 @@ h1 {
 }
 
 .selected {
-  background-color: #bcbbbb;
+  background-color: #9b9b9b;
 }
 
 .pointed {
@@ -276,12 +276,12 @@ h1 {
   }
 
   #keyboard > button:nth-child(3n) {
-    border-right: 2px solid;
+    border-right: 1px solid;
   }
 
   #keyboard > button:nth-child(10) {
     width: 100%;
-    border-right: 2px solid;
+    border-right: 1px solid;
   }
 
   #keyboard > button {
