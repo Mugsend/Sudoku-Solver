@@ -6,15 +6,12 @@
   border: none;
 }
 
-body {
-  background :#747474;
-}
-
 h1 {
   text-align: center;
   color: #191825;
   font-size: 50px;
 }
+
 
 .container {
   display: flex;
@@ -38,7 +35,7 @@ h1 {
   width: 100%;
 }
 .btn {
-  background: #e1feff;
+  background: #E0F7FA;
   height: 50px;
   border: 1px solid black;
 }
