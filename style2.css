@@ -6,6 +6,10 @@
   border: none;
 }
 
+body {
+  background :#747474;
+}
+
 h1 {
   text-align: center;
   color: #191825;
