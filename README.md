@@ -8,7 +8,7 @@ To use this Sudoku solver, follow these steps:
 
 1. Clone the repository or download the source code.
 2. Open the `index.html` file in your web browser.
-3. Enter the Sudoku puzzle you want to solve in the input fields or go to https://mugsend.github.io/sudoku-solver/.
+3. Enter the Sudoku puzzle you want to solve in the input fields or go to https://mugsend.github.io/Sudoku-Solver/.
 4. Click the "Solve" button to solve the puzzle.
 5. If a solution exists, it will be displayed on the page.
 
